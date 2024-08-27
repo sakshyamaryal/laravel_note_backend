@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,11 +56,27 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('appToken')->accessToken;
+            $userRoleAndPermission = array();
+
+            if ($user->role_id) {
+                $userRoleAndPermission = DB::table('users')
+                ->join('roles', 'roles.id', '=', 'users.role_id')
+                ->join('role_has_permissions', 'users.role_id', '=', 'roles.id')
+                ->join('permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
+                ->where('users.id', $user->id)
+                ->select('roles.name as userrole', 'permissions.name as permission')
+                ->get();
+            }else {
+                $userRoleAndPermission[0]  = array(
+                    'userrole'=>'',
+                );
+            }
 
             return response()->json([
                 'success' => true,
                 'token' => $token,
                 'user' => $user,
+                'userRoleAndPermission' => $userRoleAndPermission,
             ], 200);
         } else {
             // Authentication failed

@@ -11,3 +11,5 @@ composer require ahmedsaoud31/laravel-permission-to-vuejs=dev-master
 php artisan make:seeder RolesAndPermissionsSeeder
 
 php artisan db:seed --class=RolesAndPermissionsSeeder
+
+php artisan passport:client --personal

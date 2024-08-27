@@ -20,6 +20,9 @@ use App\Http\Controllers\NotesController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('notes', [NotesController::class, 'addNotes']);
+Route::get('notes/{id}', [NotesController::class, 'getUserWiseNotes']);
+Route::put('notes/{id}', [NotesController::class, 'updateNotes']);
+
 Route::middleware('auth:api')->get('user', [AuthController::class, 'user']);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
