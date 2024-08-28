@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -14,13 +13,26 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run()
     {
-        // Create a role
-        $role = Role::create(['name' => 'admin']);
+        // Define roles and permissions
+        $roles = ['admin', 'user'];
+        $permissions = ['add', 'edit'];
 
-        // Create a permission
-        $permission = Permission::create(['name' => 'edit notes']);
+        // Create and store roles
+        foreach ($roles as $roleName) {
+            $role = Role::create(['name' => $roleName]);
 
-        // Assign the permission to the role
-        $role->givePermissionTo($permission);
+            // Assign permissions to each role
+            foreach ($permissions as $permissionName) {
+                $permission = Permission::firstOrCreate(['name' => $permissionName]);
+
+                // Assign permission to the role
+                $role->givePermissionTo($permission);
+            }
+        }
+
+        $userRole = Role::where('name', 'user')->first();
+        if ($userRole) {
+            $userRole->revokePermissionTo('edit');
+        }
     }
 }
