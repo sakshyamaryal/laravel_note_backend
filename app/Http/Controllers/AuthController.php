@@ -103,6 +103,7 @@ class AuthController extends Controller
 
     // Attempt to authenticate the user
     if (Auth::attempt($credentials)) {
+
         $user = Auth::user();
         $token = $user->createToken('appToken')->accessToken;
 
