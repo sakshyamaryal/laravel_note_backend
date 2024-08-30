@@ -15,7 +15,7 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         // Define roles and permissions
         $roles = ['admin', 'user'];
-        $permissions = ['add', 'edit'];
+        $permissions = ['add', 'edit', 'delete'];
 
         // Create and store roles
         foreach ($roles as $roleName) {

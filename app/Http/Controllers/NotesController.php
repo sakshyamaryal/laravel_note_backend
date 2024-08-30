@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -114,6 +115,31 @@ class NotesController extends Controller
             return response()->json(['success' => false, 'errormsg' => 'notes not updated '], 404);
         } catch (\Exception $th) {
             return response()->json(['success' => false, 'errormsg' => $th]);
+        }
+    }
+
+    public function delete($id,$user_id)  {
+
+    
+
+        $userrole = User::findOrFail($user_id);
+        $permissions = $userrole->getPermissionsViaRoles();
+        $roles_per_arr = array();
+
+        foreach($permissions as $user_per => $ind){
+            array_push($roles_per_arr,$ind->name);
+        }
+
+        if(!in_array('delete', $roles_per_arr)){
+            return response()->json(['success' => false, 'data' => 'permissionismissing', 'roles_per_arr' => $roles_per_arr, 'msg'=>'Couldnot add Data beause User Doesnot have Add Permission'], 200);
+        }
+        
+        $res=Notes::where('id',$id)->delete();
+
+        if ($res) {
+            return response()->json(['success'=>true,'data' => $res]);
+        }else{
+            return response()->json(['success'=>false,'data' => 'failed to delete']);
         }
     }
 }

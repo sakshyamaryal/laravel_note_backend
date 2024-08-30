@@ -13,3 +13,5 @@ php artisan make:seeder RolesAndPermissionsSeeder
 php artisan db:seed --class=RolesAndPermissionsSeeder
 
 php artisan passport:client --personal
+
+php artisan vendor:publish --tag=passport-routes

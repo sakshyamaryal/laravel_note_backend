@@ -92,7 +92,7 @@ class UserController extends Controller
         ]);
 
         $role = Role::create(['name' => $request->input('name')]);
-
+        $role->permissions = array();
         return response()->json(['data' => $role], 201);
     }
 }
