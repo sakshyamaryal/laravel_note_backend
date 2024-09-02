@@ -89,6 +89,7 @@ class AuthController extends Controller
     // }
     public function login(Request $request)
     {
+        // dd($request);
         // Validate the request
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
@@ -96,7 +97,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['errors' => $validator->errors()]);
         }        
 
         $credentials = $request->only('email', 'password');
