@@ -21,23 +21,20 @@ use Illuminate\Support\Facades\Auth;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::post('notes', [NotesController::class, 'addNotes']);
-Route::get('notes/{id}', [NotesController::class, 'getUserWiseNotes']);
-Route::put('notes/{id}', [NotesController::class, 'updateNotes']);
-Route::delete('notes/{id}/{user_id}', [NotesController::class, 'delete']);
 
-Route::get('rolesAndPermission', [UserController::class, 'getRoleAndPermission']);
+// Route::get('rolesAndPermission', [UserController::class, 'getRoleAndPermission']);
 
-Route::get('users', [UserController::class, 'getUsers']);
-Route::get('rolesAndPermission', [UserController::class, 'getRoleAndPermission']);
-Route::post('updatePermission', [UserController::class, 'updatePermission']);
-Route::post('updateUserRole', [UserController::class, 'updateUserRole']);
-Route::post('createRole', [UserController::class, 'createRole']);
+// Route::get('rolesAndPermission', [UserController::class, 'getRoleAndPermission']);
 
-// Route::middleware('auth:api')->get('user', [AuthController::class, 'getUsers']);
+Route::middleware('auth:api')->group(function ()  {
+    Route::get('users', [UserController::class, 'getUsers']);
+    Route::get('rolesAndPermission', [UserController::class, 'getRoleAndPermission']);
+    Route::post('updateUserRole', [UserController::class, 'updateUserRole']);
+    Route::post('createRole', [UserController::class, 'createRole']);
+    Route::post('updatePermission', [UserController::class, 'updatePermission']);
 
-Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('notes/{id}', [NotesController::class, 'getUserWiseNotes']);
+    Route::post('notes', [NotesController::class, 'addNotes']);
+    Route::put('notes/{id}', [NotesController::class, 'updateNotes']);
+    Route::delete('notes/{id}/{user_id}', [NotesController::class, 'delete']);    
 });
-// Route::get('/user', function (Request $request) {
-//     return auth()->guard('api')->user();
-// });
